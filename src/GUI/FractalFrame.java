@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
+import Julia.*;
 import Mandelbrot.*;
 
 import java.awt.event.*;
@@ -40,7 +41,7 @@ public class FractalFrame extends JFrame implements ActionListener {
         System.out.println("4. Smoothed Histogram Mandelbrot");
         System.out.println("5. SHO Generated Mandelbrot");
         // int choice = Integer.parseInt(scanner.nextLine());
-        int choice = 5;
+        int choice = 6;
         switch (choice) {
             case 1:
                 panel = new MandelbrotPanel(width, height);
@@ -56,6 +57,9 @@ public class FractalFrame extends JFrame implements ActionListener {
                 break;
             case 5:
                 panel = new GeneratedColourPanel(width, height);
+                break;
+            case 6:
+                panel = new JuliaPanel(width, height);
                 break;
             default:
                 System.out.println("Invalid choice");
