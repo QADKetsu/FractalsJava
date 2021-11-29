@@ -14,16 +14,16 @@ import java.util.*;
  */
 
 public class MandelbrotCalc {
-    private int w;
-    private int h;
-    private int maxIterations = 25;
-    private double xMin = -2;
-    private double xMax = 2;
-    private double yMin = -2;
-    private double yMax = 2;
-    private double[] initialBounds;
-    private Stack<Double[]> undoStack;
-    private Stack<Double[]> redoStack;
+    protected int w;
+    protected int h;
+    protected int maxIterations = 25;
+    protected double xMin = -2;
+    protected double xMax = 2;
+    protected double yMin = -2;
+    protected double yMax = 2;
+    protected double[] initialBounds;
+    protected Stack<Double[]> undoStack;
+    protected Stack<Double[]> redoStack;
     
     // constructor
     public MandelbrotCalc(int w, int h) {
@@ -68,6 +68,7 @@ public class MandelbrotCalc {
         return toReturn;
     }
 
+    // * override this to change the type of calculation
     // the iteration
     public double[][] calculate() { // calculates for each pixel, how many iterations it takes to escape
         double[][] toReturn = new double[h][w];

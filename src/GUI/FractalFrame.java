@@ -3,6 +3,9 @@ package GUI;
 import java.util.Scanner;
 
 import javax.swing.*;
+
+import Mandelbrot.*;
+
 import java.awt.event.*;
 import java.awt.*;
 
@@ -32,11 +35,15 @@ public class FractalFrame extends JFrame implements ActionListener {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose a fractal to draw: ");
         System.out.println("1. Simple Mandelbrot");
+        System.out.println("2. Optimized Escape Mandelbrot");
         // int choice = Integer.parseInt(scanner.nextLine());
         int choice = 1;
         switch (choice) {
             case 1:
                 panel = new MandelbrotPanel(width, height);
+                break;
+            case 2:
+                panel = new OptimizedEscapePanel(width, height);
                 break;
             default:
                 System.out.println("Invalid choice");

@@ -65,7 +65,11 @@ public class FractalBar extends JToolBar {
         maxIterations.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // calculate time taken for this to complete
+                long startTime = System.currentTimeMillis();
                 parentFrame.setMaxIterations(Integer.parseInt(maxIterations.getText()));
+                long endTime = System.currentTimeMillis();
+                System.out.println("Time taken: " + (endTime - startTime) + "ms");
             }
         });
         this.add(maxIterations);

@@ -1,20 +1,19 @@
-package GUI;
+package Mandelbrot;
 
-import Mandelbrot.MandelbrotCalc;
 import MathHelper.LinearMapping;
-import java.awt.image.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
+
+import GUI.FractalPanel;
 
 public class MandelbrotPanel extends FractalPanel {
-    private int colourVersion = 0; // 0, 1, 2, 3. 0 is default, 1 is red, 2 is green, 3 is blue
-    private double xMin, xMax, yMin, yMax;
-    private MandelbrotCalc calc;
+    protected int colourVersion = 0; // 0, 1, 2, 3. 0 is default, 1 is red, 2 is green, 3 is blue
+    protected double xMin, xMax, yMin, yMax;
+    protected MandelbrotCalc calc;
 
     public MandelbrotPanel(int imageWidth, int imageHeight) {
         super(imageWidth, imageHeight);
-        drawSimpleMandel();
+        draw();
         repaint();
     }
 
@@ -25,15 +24,17 @@ public class MandelbrotPanel extends FractalPanel {
         this.yMax = yMax;
     }
 
-    //* simple mandelbrot set
-    public void drawSimpleMandel() {
+    // * simple mandelbrot set
+    // * override this method to change how the fractal is drawn
+    public void draw() {
         // uses the basic mandelbrot algorithm, unoptimized, unsmoothed, and not histogram-based
         // colouring uses mapping. value maps from 0 to MAX_ITERATIONS to 255 to 0
-        
         MandelbrotCalc simpleMandel;
         if (calc == null) {
+            // uses the simple calc
             simpleMandel = new MandelbrotCalc(width, height);
             this.calc = simpleMandel;
+            System.out.println("Simple Mandelbrot created");
         } else {
             simpleMandel = calc;
         }
@@ -59,28 +60,25 @@ public class MandelbrotPanel extends FractalPanel {
                 switch (colourVersion % 4) {
                     case 0:
                         Color colour = new Color(colourValue, colourValue, colourValue);
-                        fractalImage.setRGB(x, y, colour.getRGB());
+                        fractalImage.setRGB(x, y, colour.darker().getRGB());
                         break;
                     case 1:
                         colour = new Color(colourValue, 0, 0);
-                        fractalImage.setRGB(x, y, colour.getRGB());
+                        fractalImage.setRGB(x, y, colour.darker().getRGB());
                         break;
                     case 2:
                         colour = new Color(0, colourValue, 0);
-                        fractalImage.setRGB(x, y, colour.getRGB());
+                        fractalImage.setRGB(x, y, colour.darker().getRGB());
                         break;
                     case 3:
                         colour = new Color(0, 0, colourValue);
-                        fractalImage.setRGB(x, y, colour.getRGB());
+                        fractalImage.setRGB(x, y, colour.darker().getRGB());
                         break;
                 }
             }
         }
         repaint();
     }
-
-
-
 
     // * JPanel methods
     @Override
@@ -134,7 +132,7 @@ public class MandelbrotPanel extends FractalPanel {
             yMin = startY;
             yMax = endY;
             calc.setMinMax(xMin, xMax, yMin, yMax);
-            drawSimpleMandel();
+            draw();
             repaint();
         }
     }
@@ -164,7 +162,7 @@ public class MandelbrotPanel extends FractalPanel {
             yMax -= yDiff;
 
             calc.setMinMax(xMin, xMax, yMin, yMax);
-            drawSimpleMandel();
+            draw();
             repaint();
         }
     }
@@ -174,7 +172,7 @@ public class MandelbrotPanel extends FractalPanel {
     @Override
     public void changeColour() {
         colourVersion++;
-        drawSimpleMandel();
+        draw();
         repaint();
     }
 
@@ -193,7 +191,7 @@ public class MandelbrotPanel extends FractalPanel {
         yMax = lastBounds[3];
 
         calc.setMinMax(xMin, xMax, yMin, yMax);
-        drawSimpleMandel();
+        draw();
         repaint();
     }
 
@@ -212,7 +210,7 @@ public class MandelbrotPanel extends FractalPanel {
         yMax = lastBounds[3];
 
         calc.setMinMax(xMin, xMax, yMin, yMax);
-        drawSimpleMandel();
+        draw();
         repaint();
     }
 
@@ -229,13 +227,13 @@ public class MandelbrotPanel extends FractalPanel {
 
         calc.setMinMax(xMin, xMax, yMin, yMax);
         calc.setMaxIterations(maxIterations);
-        drawSimpleMandel();
+        draw();
         repaint();
     }
 
     public void setMaxIterations(int parseInt) {
         calc.setMaxIterations(parseInt);
-        drawSimpleMandel();
+        draw();
         repaint();
     } 
 }

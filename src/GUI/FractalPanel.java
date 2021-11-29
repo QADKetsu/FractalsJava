@@ -8,7 +8,7 @@ import javax.swing.*;
 public class FractalPanel extends JPanel {
     protected int width;
     protected int height;
-    BufferedImage fractalImage;
+    protected BufferedImage fractalImage;
     protected int clickedButton;
     protected Point clickedPoint;
 
