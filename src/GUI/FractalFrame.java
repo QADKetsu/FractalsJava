@@ -45,6 +45,9 @@ public class FractalFrame extends JFrame implements ActionListener {
             case 2:
                 panel = new OptimizedEscapePanel(width, height);
                 break;
+            case 3:
+                panel = new HistogramOptimizedPanel(width, height);
+                break;
             default:
                 System.out.println("Invalid choice");
                 break;
