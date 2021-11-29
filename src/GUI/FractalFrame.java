@@ -36,8 +36,11 @@ public class FractalFrame extends JFrame implements ActionListener {
         System.out.println("Choose a fractal to draw: ");
         System.out.println("1. Simple Mandelbrot");
         System.out.println("2. Optimized Escape Mandelbrot");
+        System.out.println("3. Histogram Mandelbrot");
+        System.out.println("4. Smoothed Histogram Mandelbrot");
+        System.out.println("5. SHO Generated Mandelbrot");
         // int choice = Integer.parseInt(scanner.nextLine());
-        int choice = 4;
+        int choice = 5;
         switch (choice) {
             case 1:
                 panel = new MandelbrotPanel(width, height);
@@ -50,6 +53,9 @@ public class FractalFrame extends JFrame implements ActionListener {
                 break;
             case 4:
                 panel = new SmoothHistOptPanel(width, height);
+                break;
+            case 5:
+                panel = new GeneratedColourPanel(width, height);
                 break;
             default:
                 System.out.println("Invalid choice");

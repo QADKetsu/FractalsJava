@@ -152,9 +152,9 @@ public class MandelbrotPanel extends FractalPanel {
             double previousY = LinearMapping.map(clickedPoint.getY(), 0, height, yMin, yMax);
 
             double xDiff = currentX - previousX;
-            xDiff /= 10;
+            xDiff /= 2;
             double yDiff = currentY - previousY;
-            yDiff /= 10;
+            yDiff /= 2;
 
             xMin -= xDiff;
             xMax -= xDiff;

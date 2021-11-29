@@ -16,7 +16,7 @@ import java.util.*;
 public class MandelbrotCalc {
     protected int w;
     protected int h;
-    protected int maxIterations = 25;
+    protected int maxIterations = 100;
     protected double xMin = -2;
     protected double xMax = 2;
     protected double yMin = -2;
