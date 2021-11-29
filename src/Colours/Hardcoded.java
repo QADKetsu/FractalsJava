@@ -6,14 +6,7 @@ import java.util.List;
 
 
 public class Hardcoded {
-    private ArrayList<Color[]> colourMaps;
-
-    public Hardcoded() {
-        colourMaps = new ArrayList<Color[]>();
-        firstHardCoded();
-    }
-    
-    public void firstHardCoded() { // ? 16 colours
+    public static Color[] firstMap() { // ? 16 colours
         Color[] colourMap = new Color[16];
         colourMap[0] = new Color(11, 51, 89);
         colourMap[1] = new Color(25,7,50);
@@ -31,10 +24,7 @@ public class Hardcoded {
         colourMap[13] = new Color(204,128,0);
         colourMap[14] = new Color(153,87,0);
         colourMap[15] = new Color(106,52,3);
-        colourMaps.add(colourMap);
+        return colourMap;
     }
 
-    public Color[] getMap(int index) {
-        return colourMaps.get(index);
-    }
 }

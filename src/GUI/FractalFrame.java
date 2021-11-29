@@ -37,7 +37,7 @@ public class FractalFrame extends JFrame implements ActionListener {
         System.out.println("1. Simple Mandelbrot");
         System.out.println("2. Optimized Escape Mandelbrot");
         // int choice = Integer.parseInt(scanner.nextLine());
-        int choice = 1;
+        int choice = 4;
         switch (choice) {
             case 1:
                 panel = new MandelbrotPanel(width, height);
@@ -47,6 +47,9 @@ public class FractalFrame extends JFrame implements ActionListener {
                 break;
             case 3:
                 panel = new HistogramOptimizedPanel(width, height);
+                break;
+            case 4:
+                panel = new SmoothHistOptPanel(width, height);
                 break;
             default:
                 System.out.println("Invalid choice");
