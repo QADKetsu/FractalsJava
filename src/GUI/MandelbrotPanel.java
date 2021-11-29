@@ -29,9 +29,15 @@ public class MandelbrotPanel extends FractalPanel {
     public void drawSimpleMandel() {
         // uses the basic mandelbrot algorithm, unoptimized, unsmoothed, and not histogram-based
         // colouring uses mapping. value maps from 0 to MAX_ITERATIONS to 255 to 0
+        
+        MandelbrotCalc simpleMandel;
+        if (calc == null) {
+            simpleMandel = new MandelbrotCalc(width, height);
+            this.calc = simpleMandel;
+        } else {
+            simpleMandel = calc;
+        }
 
-        MandelbrotCalc simpleMandel = new MandelbrotCalc(width, height);
-        this.calc = simpleMandel;
         if (xMin == 0 && xMax == 0 && yMin == 0 && yMax == 0) { // if the bounds haven't been set yet
             xMin = simpleMandel.getXMin();
             xMax = simpleMandel.getXMax();
@@ -162,4 +168,74 @@ public class MandelbrotPanel extends FractalPanel {
             repaint();
         }
     }
+
+    // **************** TOOLBAR ****************//
+
+    @Override
+    public void changeColour() {
+        colourVersion++;
+        drawSimpleMandel();
+        repaint();
+    }
+
+    public void undo() {
+        // if undo stack is empty, do nothing
+        if (calc.getUndoStack().isEmpty()) {
+            return;
+        }
+        // add to redo stack
+        calc.addRedo(xMin, xMax, yMin, yMax);
+        // pop the last bounds from the undo stack
+        Double[] lastBounds = calc.getUndoStack().pop();
+        xMin = lastBounds[0];
+        xMax = lastBounds[1];
+        yMin = lastBounds[2];
+        yMax = lastBounds[3];
+
+        calc.setMinMax(xMin, xMax, yMin, yMax);
+        drawSimpleMandel();
+        repaint();
+    }
+
+    public void redo() {
+        // if redo stack is empty, do nothing
+        if (calc.getRedoStack().isEmpty()) {
+            return;
+        }
+        // add to undo stack
+        calc.addUndo(xMin, xMax, yMin, yMax);
+        // pop the last bounds from the redo stack
+        Double[] lastBounds = calc.getRedoStack().pop();
+        xMin = lastBounds[0];
+        xMax = lastBounds[1];
+        yMin = lastBounds[2];
+        yMax = lastBounds[3];
+
+        calc.setMinMax(xMin, xMax, yMin, yMax);
+        drawSimpleMandel();
+        repaint();
+    }
+
+    public void reset() {
+        // add to undo stack
+        calc.addUndo(xMin, xMax, yMin, yMax);
+        // reset the min and max values
+        double[] newBounds = calc.getInitialBounds();
+        xMin = newBounds[0];
+        xMax = newBounds[1];
+        yMin = newBounds[2];
+        yMax = newBounds[3];
+        int maxIterations = (int) newBounds[4];
+
+        calc.setMinMax(xMin, xMax, yMin, yMax);
+        calc.setMaxIterations(maxIterations);
+        drawSimpleMandel();
+        repaint();
+    }
+
+    public void setMaxIterations(int parseInt) {
+        calc.setMaxIterations(parseInt);
+        drawSimpleMandel();
+        repaint();
+    } 
 }

@@ -59,7 +59,7 @@ public class FractalBar extends JToolBar {
         add(resetButton);
 
         // changing of iterations
-        JTextField maxIterations = new JTextField("100");
+        JTextField maxIterations = new JTextField("25");
         maxIterations.setPreferredSize(new Dimension(10,10));
         maxIterations.addActionListener(parentFrame);
         maxIterations.addActionListener(new ActionListener() {

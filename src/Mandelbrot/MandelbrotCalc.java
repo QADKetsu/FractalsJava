@@ -16,11 +16,12 @@ import java.util.*;
 public class MandelbrotCalc {
     private int w;
     private int h;
-    private int maxIterations = 100;
+    private int maxIterations = 25;
     private double xMin = -2;
     private double xMax = 2;
     private double yMin = -2;
     private double yMax = 2;
+    private double[] initialBounds;
     private Stack<Double[]> undoStack;
     private Stack<Double[]> redoStack;
     
@@ -31,6 +32,7 @@ public class MandelbrotCalc {
         undoStack = new Stack<Double[]>();
         redoStack = new Stack<Double[]>();
         addUndo(xMin, xMax, yMin, yMax);
+        initialBounds = new double[] {xMin, xMax, yMin, yMax, maxIterations};
     }
 
     // overloaders
@@ -41,6 +43,7 @@ public class MandelbrotCalc {
         undoStack = new Stack<Double[]>();
         redoStack = new Stack<Double[]>();
         addUndo(xMin, xMax, yMin, yMax);
+        initialBounds = new double[] {xMin, xMax, yMin, yMax, maxIterations};
     }
 
     public MandelbrotCalc(int w, int h, int maxIterations, double xMin, double xMax, double yMin, double yMax) {
@@ -54,6 +57,7 @@ public class MandelbrotCalc {
         undoStack = new Stack<Double[]>();
         redoStack = new Stack<Double[]>();
         addUndo(xMin, xMax, yMin, yMax);
+        initialBounds = new double[] {xMin, xMax, yMin, yMax, maxIterations};
     }
 
     //****************************** METHODS ******************************//
@@ -138,6 +142,10 @@ public class MandelbrotCalc {
         return redoStack;
     }
 
+    public double[] getInitialBounds() {
+        return initialBounds;
+    }
+
     // setters
     public void setMinMax(double xMin, double xMax, double yMin, double yMax) {
         this.xMin = xMin;
@@ -162,4 +170,9 @@ public class MandelbrotCalc {
         toAdd[2] = yMin;
         toAdd[3] = yMax;
     }
+
+    public void setMaxIterations(int parseInt) {
+        maxIterations = parseInt;
+    }
+
 }
