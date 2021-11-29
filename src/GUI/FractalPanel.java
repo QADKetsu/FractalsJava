@@ -79,4 +79,19 @@ public class FractalPanel extends JPanel {
     protected void pan(MouseEvent e) { // to be implemented by subclasses
     }
 
+    public void changeColour() {
+    }
+
+    public void undo() {
+    }
+
+    public void redo() {
+    }
+
+    public void reset() {
+    }
+
+    public void setMaxIterations(int parseInt) {
+    }
+
 }

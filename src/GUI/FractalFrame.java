@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.*;
 
 public class FractalFrame extends JFrame implements ActionListener {
     private int width;
@@ -21,6 +22,8 @@ public class FractalFrame extends JFrame implements ActionListener {
         setSize(1000, 1000);
         setResizable(false);
         setVisible(false);
+        FractalBar toolbar = new FractalBar(this);
+        getContentPane().add(toolbar, BorderLayout.NORTH);
         this.timer = new Timer(10, this);
         this.timer.setRepeats(false);
     }
@@ -67,6 +70,32 @@ public class FractalFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         panel.repaint();
         revalidate();
+        repaint();
+    }
+
+    // **************** TOOLBAR ****************//
+    public void changeColour() {
+        panel.changeColour();
+        repaint();
+    }
+
+    public void undo() {
+        panel.undo();
+        repaint();
+    }
+
+    public void redo() {
+        panel.redo();
+        repaint();
+    }
+
+    public void reset() {
+        panel.reset();
+        repaint();
+    }
+
+    public void setMaxIterations(int parseInt) {
+        panel.setMaxIterations(parseInt);
         repaint();
     }
 }
