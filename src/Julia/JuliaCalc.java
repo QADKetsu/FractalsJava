@@ -31,10 +31,12 @@ public class JuliaCalc {
         while (Math.pow(escapeRadius, 2) - escapeRadius < c.magnitude()) {
             escapeRadius += 1;
         }
+        escapeRadius = 1000;
     }
 
     public double[][] calculate() {
         double[][] result = new double[width][height];
+
         // for each pixel (x,y) on the screen
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -48,22 +50,18 @@ public class JuliaCalc {
                     scaledX = tempX;
                     iteration++;
                 }
-
-                if (iteration == maxIterations) {
-                    result[x][y] = 0;
-                } else {
-                    // N prime = F * (N + W * dx)
-                    // F == scale factor
-                    // W == weight
-                    // dx == (log(log(ESCAPE)) - log(log(z.abs))) / log(2)
-                    double F = 1000;
-                    double W = 1;
-                    double escapeLog = Math.log(Math.log(escapeRadius));
-                    double zAbsLog = Math.log(Math.log(scaledX * scaledX + scaledY * scaledY));
-                    double dx = (escapeLog - zAbsLog) / Math.log(2);
-                    double N = F * (iteration + W * dx);
-                    result[x][y] = N;
-                }
+                // N prime = F * (N + W *dx)
+                // dx = loglog(ESC) - loglog(zABS)/log(2)
+                double N = iteration;
+                double F = 1000;
+                double W = 1.0;
+                double logEsc = Math.log(escapeRadius);
+                double logLogEsc = Math.log(logEsc);
+                double logZabs = Math.log(Math.sqrt(scaledX * scaledX + scaledY * scaledY));
+                double logLogZabs = Math.log(logZabs);
+                double dx = logLogEsc - ( logLogZabs / Math.log(2)) ;
+                double Nprime = F * (N + W * dx);
+                result[x][y] = Nprime;
 
             }
 
@@ -83,8 +81,32 @@ public class JuliaCalc {
             }
         }
 
+        // log mapping
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                double iter = result[x][y];
+                double logN = Math.log(iter);
+                double logNmin = Math.log(min);
+                double logNmax = Math.log(max);
+                result[x][y] = (logN - logNmin) / (logNmax - logNmin);
+            }
+        }
+
+        min = Double.MAX_VALUE;
+        max = Double.MIN_VALUE;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (result[x][y] < min && result[x][y] != 0) {
+                    min = result[x][y];
+                }
+                if (result[x][y] > max) {
+                    max = result[x][y];
+                }
+            }
+        }
 
         System.out.println();
+
         return result;
     }
 

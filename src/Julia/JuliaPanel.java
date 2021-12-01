@@ -65,11 +65,25 @@ public class JuliaPanel extends FractalPanel {
         repaint();
     }
 
+    // private void colour(double[][] numIterationsPerPixel) {
+    //     for (int x = 0; x < width; x++) {
+    //         for (int y = 0; y < height; y++) {
+    //             int iterations = (int) numIterationsPerPixel[x][y];
+    //             int colourValue = (int) iterations % 256;
+    //             if (iterations != 0) {
+    //                 fractalImage.setRGB(x, y, colourMap.get(colourValue).getRGB());
+    //             } else {
+    //                 fractalImage.setRGB(x, y, Color.BLACK.getRGB());
+    //             }
+    //         }
+    //     }
+    // }
+
     private void colour(double[][] numIterationsPerPixel) {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                int iterations = (int) numIterationsPerPixel[x][y];
-                int colourValue = (int) iterations % 256;
+                double iterations = numIterationsPerPixel[x][y];
+                int colourValue = (int) iterations * 1000 % 256;
                 if (iterations != 0) {
                     fractalImage.setRGB(x, y, colourMap.get(colourValue).getRGB());
                 } else {
