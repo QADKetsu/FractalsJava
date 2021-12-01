@@ -9,12 +9,13 @@ public class JuliaCalc {
     // f(z) = z^2 + c
     private int width = 1000;
     private int height = 1000;
-    private Complex c = new Complex(-0.4337, -0.5823); // arbitrary
+    private Complex c = new Complex(-0.4337, -1); // arbitrary
     private int maxIterations = 1000;
     double escapeRadius;
     private double minX, maxX, minY, maxY;
     protected Stack<Double[]> undoStack;
     protected Stack<Double[]> redoStack;
+    private ArrayList<Double> counts;
 
     public JuliaCalc(int width, int height) {
         this.width = width;
@@ -36,6 +37,7 @@ public class JuliaCalc {
 
     public double[][] calculate() {
         double[][] result = new double[width][height];
+        counts = new ArrayList<Double>();
 
         // for each pixel (x,y) on the screen
         for (int x = 0; x < width; x++) {
@@ -55,57 +57,46 @@ public class JuliaCalc {
                 double N = iteration;
                 double F = 1000;
                 double W = 1.0;
-                double logEsc = Math.log(escapeRadius);
+                double logEsc = Math.log(1000);
                 double logLogEsc = Math.log(logEsc);
-                double logZabs = Math.log(Math.sqrt(scaledX * scaledX + scaledY * scaledY));
+                double logZabs = 0.5 * Math.log((scaledX * scaledX + scaledY * scaledY));
                 double logLogZabs = Math.log(logZabs);
                 double dx = logLogEsc - ( logLogZabs / Math.log(2)) ;
                 double Nprime = F * (N + W * dx);
                 result[x][y] = Nprime;
-
+                counts.add(Nprime);
             }
 
         }
 
-        // find min and max of result
-        double min = Double.MAX_VALUE;
-        double max = Double.MIN_VALUE;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (result[x][y] < min && result[x][y] != 0) {
-                    min = result[x][y];
-                }
-                if (result[x][y] > max) {
-                    max = result[x][y];
-                }
-            }
-        }
-
-        // log mapping
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                double iter = result[x][y];
-                double logN = Math.log(iter);
-                double logNmin = Math.log(min);
-                double logNmax = Math.log(max);
-                result[x][y] = (logN - logNmin) / (logNmax - logNmin);
-            }
-        }
-
-        min = Double.MAX_VALUE;
-        max = Double.MIN_VALUE;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (result[x][y] < min && result[x][y] != 0) {
-                    min = result[x][y];
-                }
-                if (result[x][y] > max) {
-                    max = result[x][y];
+        Collections.sort(counts);
+        // for each Nprime, find its percentile
+        
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                double Nprime = result[i][j];
+                if (Nprime != 0) {
+                    // find index of Nprime in counts
+                    int index = Collections.binarySearch(counts, Nprime);
+                    double percentile = (double)index / (double)counts.size();
+                    result[i][j] = percentile;
                 }
             }
         }
 
-        System.out.println();
+        // find min max of result
+        double min = result[0][0];
+        double max = result[0][0];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (result[i][j] < min) {
+                    min = result[i][j];
+                }
+                if (result[i][j] > max) {
+                    max = result[i][j];
+                }
+            }
+        }
 
         return result;
     }

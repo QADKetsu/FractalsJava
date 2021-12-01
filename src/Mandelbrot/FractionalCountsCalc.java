@@ -30,21 +30,26 @@ public class FractionalCountsCalc extends MandelbrotCalc {
                     smoothedIteration++; 
                 } // optimized mandelbrot calculation
 
-                
-                // N prime = F * (N + W * dx)
-                // F = 1000, W = 1.0
-                // dx = loglog(esc) - loglog(absz) / log(2)
-                double F = 1000;
-                double W = 1.0;
-                double logEsc = Math.log(2);
-                double logLogEsc = Math.log(Math.log(2));
-                double logAbsZ = 0.5 * Math.log(X * X + Y * Y);
-                double loglogAbsZ = Math.log(logAbsZ);
-                double dx = logLogEsc - (loglogAbsZ / logEsc);
-                double Nprime = F * (smoothedIteration + W * dx);
+                if (smoothedIteration == maxIterations) {
+                    smoothedIterationsPerPixel[x][y] = 0;
+                } else {
 
-                smoothedIterationsPerPixel[x][y] = Nprime;
-                counts.add(Nprime);
+                    // N prime = F * (N + W * dx)
+                    // F = 1000, W = 1.0
+                    // dx = loglog(esc) - loglog(absz) / log(2)
+                    double F = 1000;
+                    double W = 1.0;
+                    double logEsc = Math.log(2);
+                    double logLogEsc = Math.log(Math.log(2));
+                    double logAbsZ = 0.5 * Math.log(X * X + Y * Y);
+                    double loglogAbsZ = Math.log(logAbsZ);
+                    double dx = logLogEsc - (loglogAbsZ / logEsc);
+                    double Nprime = F * (smoothedIteration + W * dx);
+    
+                    smoothedIterationsPerPixel[x][y] = Nprime;
+                    counts.add(Nprime);
+                }
+                
             }
         }
 
@@ -54,10 +59,12 @@ public class FractionalCountsCalc extends MandelbrotCalc {
         for (int i = 0; i < w; i++) {
             for (int j = 0; j < h; j++) {
                 double Nprime = smoothedIterationsPerPixel[i][j];
-                // find index of Nprime in counts
-                int index = Collections.binarySearch(counts, Nprime);
-                double percentile = (double)index / (double)counts.size();
-                smoothedIterationsPerPixel[i][j] = percentile;
+                if (Nprime != 0) {
+                    // find index of Nprime in counts
+                    int index = Collections.binarySearch(counts, Nprime);
+                    double percentile = (double)index / (double)counts.size();
+                    smoothedIterationsPerPixel[i][j] = percentile;
+                }
             }
         }
         

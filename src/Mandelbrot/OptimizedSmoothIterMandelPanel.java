@@ -40,7 +40,7 @@ public class OptimizedSmoothIterMandelPanel extends MandelbrotPanel{
         double [][] hue = smoothOptCalc.calculate();
         // colorMap = Generated.firstMap();
         // colourOptOne(hue, colorMap);
-        colorMap = Generated.seventhMap();
+        colorMap = Generated.ninthMap();
         colourOptTwo(hue, colorMap);
     }
 

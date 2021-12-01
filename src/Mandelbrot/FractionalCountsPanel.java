@@ -36,7 +36,7 @@ public class FractionalCountsPanel extends MandelbrotPanel{
         double [][] hue = fractCalc.calculate();
         // colorMap = Generated.firstMap();
         // colourOptOne(hue, colorMap);
-        colorMap = Generated.seventhMap();
+        colorMap = Generated.ninthMap();
         colourOptTwo(hue, colorMap);
     }
 
@@ -62,7 +62,7 @@ public class FractionalCountsPanel extends MandelbrotPanel{
             for (int j = 0; j < height; j++) {
                 double hueVal = hue[i][j];
                 if (hueVal != 0) {
-                    int colorI = (int) LinearMapping.map(hueVal, 0, 1, 0, 255) % colorMap.size();
+                    int colorI = (int) LinearMapping.map(hueVal, 0, 1, 1024, 0) % colorMap.size();
                     Color color = colorMap.get(colorI);
                     fractalImage.setRGB(i, j, color.getRGB());
                 } else {
