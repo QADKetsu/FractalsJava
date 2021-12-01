@@ -170,6 +170,7 @@ public class MandelbrotCalc {
         toAdd[1] = xMax;
         toAdd[2] = yMin;
         toAdd[3] = yMax;
+        redoStack.push(toAdd);
     }
 
     public void setMaxIterations(int parseInt) {

@@ -1,5 +1,7 @@
 package Julia;
 
+import java.util.*;
+
 import MathHelper.Complex;
 import MathHelper.LinearMapping;
 
@@ -10,11 +12,21 @@ public class JuliaCalc {
     private Complex c = new Complex(-0.4337, -0.5823); // arbitrary
     private int maxIterations = 1000;
     double escapeRadius;
+    private double minX, maxX, minY, maxY;
+    protected Stack<Double[]> undoStack;
+    protected Stack<Double[]> redoStack;
 
     public JuliaCalc(int width, int height) {
         this.width = width;
         this.height = height;
-        escapeRadius = Math.ceil(c.magnitude());
+        escapeRadius = 2;
+        minX = -escapeRadius;
+        maxX = escapeRadius;
+        minY = -escapeRadius;
+        maxY = escapeRadius;
+        undoStack = new Stack<Double[]>();
+        redoStack = new Stack<Double[]>();
+        addUndo(minX, maxX, minY, maxY);
 
         while (Math.pow(escapeRadius, 2) - escapeRadius < c.magnitude()) {
             escapeRadius += 1;
@@ -26,8 +38,8 @@ public class JuliaCalc {
         // for each pixel (x,y) on the screen
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                double scaledX = LinearMapping.map(x, 0, width, -escapeRadius, escapeRadius);
-                double scaledY = LinearMapping.map(y, 0, height, -escapeRadius, escapeRadius);
+                double scaledX = LinearMapping.map(x, 0, width, minX, maxX);
+                double scaledY = LinearMapping.map(y, 0, height, minY, maxY);
 
                 int iteration = 0;
                 while (scaledX * scaledX + scaledY * scaledY < escapeRadius * escapeRadius && iteration < maxIterations) {
@@ -68,6 +80,18 @@ public class JuliaCalc {
         return escapeRadius;
     }
 
+    public double[] getMinMax() {
+        return new double[]{minX, maxX, minY, maxY};
+    }
+
+    public Stack<Double[]> getUndoStack() {
+        return undoStack;
+    }
+
+    public Stack<Double[]> getRedoStack() {
+        return redoStack;
+    }
+
     // * setters
     public void setWidth(int width) {
         this.width = width;
@@ -89,6 +113,33 @@ public class JuliaCalc {
         this.escapeRadius = escapeRadius;
     }
 
-    
+    public void setMinMax(double minX, double maxX, double minY, double maxY) {
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+    }
+
+    public void addUndo(double xMin, double xMax, double yMin, double yMax) {
+        Double[] toAdd = new Double[4];
+        toAdd[0] = xMin;
+        toAdd[1] = xMax;
+        toAdd[2] = yMin;
+        toAdd[3] = yMax;
+        undoStack.push(toAdd);
+    }
+
+    public void addRedo(double xMin, double xMax, double yMin, double yMax) {
+        Double[] toAdd = new Double[4];
+        toAdd[0] = xMin;
+        toAdd[1] = xMax;
+        toAdd[2] = yMin;
+        toAdd[3] = yMax;
+        redoStack.push(toAdd);
+    }
+
+    public double[] getInitialBounds() {
+        return new double[]{-2, 2, -2, 2, 1000};
+    }
 
 }
