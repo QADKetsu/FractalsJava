@@ -69,8 +69,8 @@ public class JuliaPanel extends FractalPanel {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int iterations = (int) numIterationsPerPixel[x][y];
-                int colourValue = (int) iterations/10000;
-                if (iterations != calc.getMaxIterations()) {
+                int colourValue = (int) iterations % 256;
+                if (iterations != 0) {
                     fractalImage.setRGB(x, y, colourMap.get(colourValue).getRGB());
                 } else {
                     fractalImage.setRGB(x, y, Color.BLACK.getRGB());

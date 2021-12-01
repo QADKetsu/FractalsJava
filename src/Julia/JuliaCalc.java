@@ -48,14 +48,43 @@ public class JuliaCalc {
                     scaledX = tempX;
                     iteration++;
                 }
+
                 if (iteration == maxIterations) {
                     result[x][y] = 0;
                 } else {
-                    result[x][y] = iteration;
+                    // N prime = F * (N + W * dx)
+                    // F == scale factor
+                    // W == weight
+                    // dx == (log(log(ESCAPE)) - log(log(z.abs))) / log(2)
+                    double F = 1000;
+                    double W = 1;
+                    double escapeLog = Math.log(Math.log(escapeRadius));
+                    double zAbsLog = Math.log(Math.log(scaledX * scaledX + scaledY * scaledY));
+                    double dx = (escapeLog - zAbsLog) / Math.log(2);
+                    double N = F * (iteration + W * dx);
+                    result[x][y] = N;
+                }
+
+            }
+
+        }
+
+        // find min and max of result
+        double min = Double.MAX_VALUE;
+        double max = Double.MIN_VALUE;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (result[x][y] < min && result[x][y] != 0) {
+                    min = result[x][y];
+                }
+                if (result[x][y] > max) {
+                    max = result[x][y];
                 }
             }
         }
 
+
+        System.out.println();
         return result;
     }
 
