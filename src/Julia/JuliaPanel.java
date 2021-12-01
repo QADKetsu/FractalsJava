@@ -3,13 +3,16 @@ package Julia;
 import MathHelper.LinearMapping;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
 
+import Colours.Generated;
 import GUI.FractalPanel;
 
 public class JuliaPanel extends FractalPanel {
     private JuliaCalc calc;
     int colourVersion;
     private double minX, maxX, minY, maxY;
+    HashMap<Integer, Color> colourMap = Generated.sixthMap();
 
     public JuliaPanel(int imageWidth, int imageHeight) {
         super(imageWidth, imageHeight);
@@ -34,31 +37,46 @@ public class JuliaPanel extends FractalPanel {
 
         double[][] numIterationsPerPixel = calc.calculate();
         // for each pixel, map iteration to range of 0 - 255
+        // for (int x = 0; x < width; x++) {
+        //     for (int y = 0; y < height; y++) {
+        //         int iterations = (int) numIterationsPerPixel[x][y];
+        //         int colourValue = (int) LinearMapping.map(iterations, 0, calc.getMaxIterations(), 255, 0);
+        //         switch (colourVersion % 4) {
+        //             case 0:
+        //                 Color colour = new Color(colourValue, colourValue, colourValue);
+        //                 fractalImage.setRGB(x, y, colour.darker().getRGB());
+        //                 break;
+        //             case 1:
+        //                 colour = new Color(colourValue, 0, 0);
+        //                 fractalImage.setRGB(x, y, colour.darker().getRGB());
+        //                 break;
+        //             case 2:
+        //                 colour = new Color(0, colourValue, 0);
+        //                 fractalImage.setRGB(x, y, colour.darker().getRGB());
+        //                 break;
+        //             case 3:
+        //                 colour = new Color(0, 0, colourValue);
+        //                 fractalImage.setRGB(x, y, colour.darker().getRGB());
+        //                 break;
+        //         }
+        //     }
+        // }
+        colour(numIterationsPerPixel);
+        repaint();
+    }
+
+    private void colour(double[][] numIterationsPerPixel) {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int iterations = (int) numIterationsPerPixel[x][y];
-                int colourValue = (int) LinearMapping.map(iterations, 0, calc.getMaxIterations(), 255, 0);
-                switch (colourVersion % 4) {
-                    case 0:
-                        Color colour = new Color(colourValue, colourValue, colourValue);
-                        fractalImage.setRGB(x, y, colour.darker().getRGB());
-                        break;
-                    case 1:
-                        colour = new Color(colourValue, 0, 0);
-                        fractalImage.setRGB(x, y, colour.darker().getRGB());
-                        break;
-                    case 2:
-                        colour = new Color(0, colourValue, 0);
-                        fractalImage.setRGB(x, y, colour.darker().getRGB());
-                        break;
-                    case 3:
-                        colour = new Color(0, 0, colourValue);
-                        fractalImage.setRGB(x, y, colour.darker().getRGB());
-                        break;
+                int colourValue = (int) iterations/10000;
+                if (iterations != calc.getMaxIterations()) {
+                    fractalImage.setRGB(x, y, colourMap.get(colourValue).getRGB());
+                } else {
+                    fractalImage.setRGB(x, y, Color.BLACK.getRGB());
                 }
             }
         }
-        repaint();
     }
 
     // * JPanel methods

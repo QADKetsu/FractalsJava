@@ -41,7 +41,7 @@ public class FractalFrame extends JFrame implements ActionListener {
         System.out.println("4. Smoothed Histogram Mandelbrot");
         System.out.println("5. SHO Generated Mandelbrot");
         // int choice = Integer.parseInt(scanner.nextLine());
-        int choice = 5;
+        int choice = 6;
         switch (choice) {
             case 1:
                 panel = new MandelbrotPanel(width, height);

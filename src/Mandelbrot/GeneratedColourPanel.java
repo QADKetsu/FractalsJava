@@ -10,7 +10,8 @@ import MathHelper.LinearMapping;
 // calc uses Smooth Hist Opt Calc
 public class GeneratedColourPanel extends MandelbrotPanel{
     // private Color[] colorMap;
-    private HashMap<Integer, Color> colorMap;
+    // private HashMap<Integer, Color> colorMap;
+    HashMap<Integer, Color> colorMap;
 
     public GeneratedColourPanel(int imageWidth, int imageHeight) {
         super(imageWidth, imageHeight);
@@ -25,7 +26,6 @@ public class GeneratedColourPanel extends MandelbrotPanel{
             super.calc = smoothHistOptCalc;
             // colorMap = Generated.fourthMap(); 
             // colorMap = Hardcoded.firstMap();
-            colorMap = Generated.firstMap();
             System.out.println("SHO Mandelbrot (Generated Colour Scheme) created");
         } else {
             smoothHistOptCalc = super.calc;
@@ -41,22 +41,20 @@ public class GeneratedColourPanel extends MandelbrotPanel{
         }
 
         double [][] hue = smoothHistOptCalc.calculate();
+        // colorMap = Generated.firstMap();
+        // colourOptOne(hue, colorMap);
+        colorMap = Generated.seventhMap();
+        colourOptTwo(hue, colorMap);
+    }
+
+    // colour options
+    private void colourOptOne(double[][] hue, HashMap<Integer, Color> colorMap) {
+
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 double hueVal = hue[i][j];
-                // if (hueVal != 0) { // ? 4th map
-                //     int colorI = (int) LinearMapping.map(hueVal, 0, 1, 0, 256) % 256;
-                //     Color color = colorMap[colorI] ;
-                //     fractalImage.setRGB(i, j, color.getRGB());
-                //     // int colourVal = (int) LinearMapping.map(hueVal, 0, 1, 15, 0);
-                //     // Color color = colorMap[colourVal];
-                //     fractalImage.setRGB(i, j, color.getRGB());
-                // } else {
-                //     fractalImage.setRGB(i, j, Color.BLACK.getRGB());
-                // }
-
-                if (hueVal != 0) { // ? 1st map
-                    int colorI = (int) LinearMapping.map(hueVal, 0, 1, 256, 0);
+                if (hueVal != 0) {
+                    int colorI = (int) LinearMapping.map(hueVal, 0, 1, 0, 256);
                     Color color = colorMap.get(colorI);
                     fractalImage.setRGB(i, j, color.getRGB());
                 } else {
@@ -65,5 +63,19 @@ public class GeneratedColourPanel extends MandelbrotPanel{
             }
         }
     }
-    
+
+    private void colourOptTwo(double[][] hue, HashMap<Integer, Color> colorMap) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                double hueVal = hue[i][j];
+                if (hueVal != 0) {
+                    int colorI = (int) LinearMapping.map(hueVal, 0, 1, 0, 704) % colorMap.size();
+                    Color color = colorMap.get(colorI);
+                    fractalImage.setRGB(i, j, color.getRGB());
+                } else {
+                    fractalImage.setRGB(i, j, Color.getHSBColor((float) 0.0, (float) 0.1,(float) 0.1).getRGB());
+                }
+            }
+        }
+    }
 }
